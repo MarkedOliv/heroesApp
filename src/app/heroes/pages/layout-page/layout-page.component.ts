@@ -1,28 +1,43 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { User } from 'src/app/auth/interfaces/user.interface';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 @Component({
   selector: 'app-layout-page',
   templateUrl: './layout-page.component.html',
-  styles: [
-  ]
+  styles: [],
 })
 export class LayoutPageComponent {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router
+  ) {}
 
   public sidebarItems = [
     {
       label: 'Listado',
       icon: 'label',
-      url: './list'
+      url: './list',
     },
     {
       label: 'Crear',
       icon: 'add',
-      url: './new-hero'
+      url: './new-hero',
     },
     {
       label: 'Buscar',
       icon: 'search',
-      url: './search'
+      url: './search',
     },
-  ]
+  ];
+
+  get user(): User | undefined {
+    return this.authService.currentUser;
+  }
+
+  onLogout(): void {
+    this.authService.logout();
+    this.router.navigate(['/auth/login'])
+  }
 }
